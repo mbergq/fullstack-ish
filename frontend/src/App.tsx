@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
-// import "./App.css";
+import "./index.css";
 
 type User = { userId: number; username: string }[];
 
@@ -18,7 +18,9 @@ function App() {
   }, []);
   return (
     <>
-      <h2>{data && data.map((res) => res.username)}</h2>
+      <div className="min-h-dvh h-full w-full bg-slate-600">
+        <span>{data && data.map((res) => res.username)}</span>
+      </div>
     </>
   );
 }
