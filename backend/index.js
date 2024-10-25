@@ -13,26 +13,43 @@ const client = new Client({
 client.connect();
 
 const app = express();
+app.use(express.json());
+const bodyParser = require("body-parser");
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
 app.get("/api", (_request, response) => {
   response.send({ hello: "World" });
 });
 
 app.get("/api/users", async (_request, response) => {
-  const { rows } = await client.query("SELECT * FROM users");
-  console.log(rows);
+  const { rows } = await client.query(
+    "SELECT * FROM users WHERE username = $1",
+    ["georgeclooney"]
+  );
   response.send(rows);
 });
 
-// const addNote = {
-//   text: "INSERT INTO notes(name, content) VALUES ($1, $2)",
-//   values: ["myFirstNote", "this is my first note"],
-// };
-
-// const res = await client.query(addNote);
+app.post("/api/add-note", async (req, response) => {
+  const { name, content } = req.body;
+  console.log(req.body);
+  const text = "INSERT INTO notes (name, content) VALUES ($1, $2)";
+  const values = [name, content];
+  const { rows } = await client.query(text, values);
+  response.status(200).json({
+    name,
+    content,
+  });
+  // response.send(rows);
+});
 
 app.use(express.static(path.join(path.resolve(), "dist")));
 
-app.listen(3000, () => {
-  console.log("Redo på http://localhost:3000/");
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`Redo på http://localhost:${port}/`);
 });
