@@ -35,23 +35,21 @@ app.get("/api/users", async (_request, response) => {
 
 app.get("/api/notes", async (_request, response) => {
   const { rows } = await client.query(
-    "SELECT * FROM notes INNER JOIN user ON notes.user_id = user_id"
+    // "SELECT * FROM notes INNER JOIN user ON notes.user_id = user_id"
+    "SELECT * FROM notes;"
   );
   response.send(rows);
 });
 
 app.post("/api/add-note", async (req, response) => {
   const { name, content } = req.body;
-  // Get url params id
-  // console.log(req.body);
   const text = "INSERT INTO notes (name, content) VALUES ($1, $2)";
   const values = [name, content];
-  const { rows } = await client.query(text, values);
+  await client.query(text, values);
   response.status(200).json({
     name,
     content,
   });
-  // response.send(rows);
 });
 
 app.use(express.static(path.join(path.resolve(), "dist")));
