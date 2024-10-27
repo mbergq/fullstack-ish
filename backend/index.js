@@ -33,8 +33,16 @@ app.get("/api/users", async (_request, response) => {
   response.send(rows);
 });
 
+app.get("/api/notes", async (_request, response) => {
+  const { rows } = await client.query(
+    "SELECT * FROM notes INNER JOIN user ON notes.user_id = user_id"
+  );
+  response.send(rows);
+});
+
 app.post("/api/add-note", async (req, response) => {
   const { name, content } = req.body;
+  // Get url params id
   // console.log(req.body);
   const text = "INSERT INTO notes (name, content) VALUES ($1, $2)";
   const values = [name, content];

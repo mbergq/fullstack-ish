@@ -3,7 +3,9 @@ import { useEffect } from "react";
 import "./index.css";
 import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
-type User = { userId: number; username: string }[];
+import Note from "./Note";
+
+type Note = { note_id: number; name: string; content: string }[];
 
 type Inputs = {
   name: string;
@@ -26,19 +28,18 @@ function App() {
     });
   };
 
-  const [fetchData, setFetchData] = useState<null | User>(null);
+  const [notes, setNotes] = useState<null | Note>(null);
   useEffect(() => {
-    axios.get("api/users").then((res) => {
+    axios.get("api/notes").then((res) => {
       console.log(res.data);
-      setFetchData(res.data);
+      setNotes(res.data);
     });
   }, []);
   return (
     <>
-      <div className="min-h-dvh h-full w-full bg-slate-600 flex">
+      <div className="min-h-dvh h-full w-full bg-slate-600 flex flex-col">
         {/* <span>{fetchData && fetchData.map((res) => res.username)}</span> */}
-        {/* <div className="bg-orange-300"> */}
-        <form onSubmit={handleSubmit(onSubmit)} className="w-40 ml-10 mt-10">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-40">
           <p>Add note</p>
           <input placeholder="Name.." {...register("name")} className="my-2" />
           <textarea
@@ -55,8 +56,17 @@ function App() {
             Add
           </button>
         </form>
+        {notes &&
+          notes.map((note) => (
+            <>
+              <Note noteName={note.name} noteContent={note.content} />
+              {/* <div className="w-72 h-48 bg-slate-200">
+                <p>{note.name}</p>
+                <p>{note.content}</p>
+              </div> */}
+            </>
+          ))}
       </div>
-      {/* </div> */}
     </>
   );
 }
