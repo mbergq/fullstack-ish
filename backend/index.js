@@ -35,7 +35,7 @@ app.get("/api/users", async (_request, response) => {
 
 app.post("/api/add-note", async (req, response) => {
   const { name, content } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   const text = "INSERT INTO notes (name, content) VALUES ($1, $2)";
   const values = [name, content];
   const { rows } = await client.query(text, values);

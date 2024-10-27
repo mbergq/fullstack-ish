@@ -35,18 +35,28 @@ function App() {
   }, []);
   return (
     <>
-      <div className="min-h-dvh h-full w-full bg-slate-600">
-        <span>{fetchData && fetchData.map((res) => res.username)}</span>
-        <div className="h-60 w-60 bg-orange-300">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <input defaultValue="" {...register("name")} />
-            <input {...register("content", { required: true })} />
-            {errors.name && <span>This field is required</span>}
+      <div className="min-h-dvh h-full w-full bg-slate-600 flex">
+        {/* <span>{fetchData && fetchData.map((res) => res.username)}</span> */}
+        {/* <div className="bg-orange-300"> */}
+        <form onSubmit={handleSubmit(onSubmit)} className="w-40 ml-10 mt-10">
+          <p>Add note</p>
+          <input placeholder="Name.." {...register("name")} className="my-2" />
+          <textarea
+            placeholder="Content.."
+            {...register("content", { required: true })}
+            className="h-60"
+          />
+          {errors.name && <span>This field is required</span>}
 
-            <input className="p-10 bg-slate-600" type="submit" />
-          </form>
-        </div>
+          <button
+            className="py-2 px-2 my-2 bg-slate-600 border-solid border"
+            type="submit"
+          >
+            Add
+          </button>
+        </form>
       </div>
+      {/* </div> */}
     </>
   );
 }
