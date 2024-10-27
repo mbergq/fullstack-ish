@@ -34,10 +34,7 @@ app.get("/api/users", async (_request, response) => {
 });
 
 app.get("/api/notes", async (_request, response) => {
-  const { rows } = await client.query(
-    // "SELECT * FROM notes INNER JOIN user ON notes.user_id = user_id"
-    "SELECT * FROM notes;"
-  );
+  const { rows } = await client.query("SELECT * FROM notes;");
   response.send(rows);
 });
 

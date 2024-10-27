@@ -13,7 +13,14 @@ type Inputs = {
 };
 
 function App() {
+  const [user, setUser] = useState<null | string>(null);
   const [notes, setNotes] = useState<null | Note>(null);
+
+  const fetchUser = () => {
+    axios.get("api/users").then((res) => {
+      setUser(res.data[0].username);
+    });
+  };
 
   const fetchData = () => {
     axios.get("api/notes").then((res) => {
@@ -23,6 +30,7 @@ function App() {
     });
   };
   useEffect(() => {
+    fetchUser();
     fetchData();
   }, []);
 
@@ -45,6 +53,7 @@ function App() {
     <>
       <div className="min-h-dvh h-full w-full bg-slate-600 flex flex-col">
         <form onSubmit={handleSubmit(onSubmit)} className="w-40">
+          <h2>Logged in as: {user}</h2>
           <p>Add note</p>
           <input
             placeholder="Name.."
@@ -68,13 +77,11 @@ function App() {
         <div className="w-full flex flex-wrap">
           {notes &&
             notes.map((note) => (
-              <>
-                <Note
-                  key={note.id}
-                  noteName={note.name}
-                  noteContent={note.content}
-                />
-              </>
+              <Note
+                key={note.id}
+                noteName={note.name}
+                noteContent={note.content}
+              />
             ))}
         </div>
       </div>
